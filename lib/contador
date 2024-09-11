@@ -1,0 +1,84 @@
+// //poiner cupaapp
+// // import 'package:flutter/cupertino.dart';
+
+// // void main() => runApp(const MyApp());
+
+// // class MyApp extends StatelessWidget {
+// //   const MyApp({super.key});
+
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     return const CupertinoApp(
+// //       title: 'Cupertino App',
+// //       home: CupertinoPageScaffold(
+// //         navigationBar: CupertinoNavigationBar(
+// //           middle: Text('Cupertino App Bar'),
+// //         ),
+// //         child: Center(
+// //           child: Text('Hello World'),
+// //         ),
+// //       ),
+// //     );
+// //   }
+// // }
+// //metaapp
+// import 'package:flutter/material.dart';
+
+// void main() => runApp(const MyApp());
+
+// class MyApp extends StatefulWidget {
+//   const MyApp({super.key});
+//   @override
+//   State<MyApp> createState() => _MyAppState();
+// }
+
+// class _MyAppState extends State<MyApp> {
+//   //es un parametro nombrado y es diferente a un parametroindexado, ya que puedo cambiar el nombre de los parametros,por que sabe a que propiedad se esta mandado
+
+//   int contador = 0;
+//   @override
+//   Widget build(BuildContext context) {
+//     //recibe el contexto o la referencia que representa a esta clase
+//     return MaterialApp(
+//       // es la base de la app, es el witget padre
+//       title: 'Material App',
+
+//       ///
+//       home: Scaffold(
+//         //carga un pantalla scaffold que soportara un elemento
+//         appBar: AppBar(
+//           title: const Text('Material App Bar'),
+//           backgroundColor: const Color.fromARGB(25, 13, 4, 4),
+//         ),
+//         body: Container(
+//           width: MediaQuery.of(context).size.width,
+//           color: Colors.grey,
+//           child: Center(
+//             child: Center(
+//               child: Text('Contador de clicks:$contador',
+//                   //la interpolacion de strings ayuda a mostrar los valores
+//                   textAlign: TextAlign.center,
+//                   style:const TextStyle(
+//                     color: Colors.black45,
+//                   )),
+//             ),
+//           ),
+//         ),
+//         floatingActionButton: FloatingActionButton(
+//             child: const Icon(Icons.add_sharp),
+//             onPressed: () {
+//               contador++;
+//               setState(() {
+
+//               });
+//               print(contador);
+//             }),
+//       ),
+//     );
+//   }
+// }
+
+// /// textos en amarillo,es que los elementos dentro no estan bien acomodados
+// /// //child puede contener un lemento
+// /// //children pueded cintener varios elementos hijos
+// ///
