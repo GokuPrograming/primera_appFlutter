@@ -1,32 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pmsn2024b/database/movies_database.dart';
+import 'package:pmsn2024b/firebase/database_movies.dart';
 import 'package:pmsn2024b/models/moviesdao.dart';
 import 'package:pmsn2024b/settings/global_values.dart';
+import 'package:pmsn2024b/views/movie_view_item.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 
-class MovieView extends StatefulWidget {
-
-  MovieView({super.key, this.moviesDAO});
+// ignore: must_be_immutable
+class NewMovieViewsFirebase extends StatefulWidget {
+  final String? uid;
+  NewMovieViewsFirebase({super.key, this.moviesDAO, this.uid});
   MoviesDAO? moviesDAO;
-  
   @override
-  State<MovieView> createState() => _MovieViewState();
+  State<NewMovieViewsFirebase> createState() => _MovieViewState();
 }
 
-class _MovieViewState extends State<MovieView> {
+class _MovieViewState extends State<NewMovieViewsFirebase> {
   TextEditingController conName = TextEditingController();
   TextEditingController conOverview = TextEditingController();
   TextEditingController conImgMovie = TextEditingController();
   TextEditingController conRelease = TextEditingController();
   TextEditingController conId = TextEditingController();
-  MoviesDatabase? moviesDatabase;
+  DatabaseMovies dbMovies = DatabaseMovies();
 
   @override
   void initState() {
     super.initState();
-    moviesDatabase = MoviesDatabase();
+    dbMovies;
     if (widget.moviesDAO != null) {
       // conId.text = widget.moviesDAO!.idMovie! as String;
       conName.text = widget.moviesDAO!.nameMovie!;
@@ -72,27 +74,18 @@ class _MovieViewState extends State<MovieView> {
 
     final btnSave = ElevatedButton(
       onPressed: () {
-        // Map<String, dynamic> data = {
-        //   "idMovie": widget.moviesDAO!.idMovie!,
-        //   "nameMovie": conName.text,
-        //   "overview": conOverview.text,
-        //   "idGenre": 1,
-        //   "imgMovie": conImgMovie.text,
-        //   "releaseDate": conRelease.text
-        // };
 
-        // print('actualizo el valor en la tabla');
         if (widget.moviesDAO == null) {
-          moviesDatabase!.INSERT('tblmovies', {
+          dbMovies.insertar({
             "nameMovie": conName.text,
             "overview": conOverview.text,
-            "idGenre": 1,
             "imgMovie": conImgMovie.text,
             "releaseDate": conRelease.text
           }).then((value) {
-            if (value > 0) {
-              GlobalValues.banUpdateListmovies.value =
-                  !GlobalValues.banUpdateListmovies.value;
+            if (value) {
+              ///con el streambuilder ya no se necesita usar usar el valueNotifier
+              // GlobalValues.banUpdateListmovies.value =
+              //     !GlobalValues.banUpdateListmovies.value;
               return QuickAlert.show(
                 context: context,
                 type: QuickAlertType.success,
@@ -111,17 +104,16 @@ class _MovieViewState extends State<MovieView> {
             }
           });
         } else {
-          moviesDatabase!.UPDATE('tblmovies', {
-            "idMovie": widget.moviesDAO!.idMovie!,
+          dbMovies.Update({
             "nameMovie": conName.text,
             "overview": conOverview.text,
-            "idGenre": 1,
             "imgMovie": conImgMovie.text,
             "releaseDate": conRelease.text
-          }).then((value) {
+          }, '${widget.uid}')
+              .then((value) {
             final msj;
             QuickAlertType type = QuickAlertType.success;
-            if (value > 0) {
+            if (value) {
               GlobalValues.banMoviemientoActualizar.value =
                   !GlobalValues.banMoviemientoActualizar.value;
               type = QuickAlertType.success;

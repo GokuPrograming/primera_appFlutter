@@ -11,7 +11,7 @@ class MoviesDAO {
   factory MoviesDAO.fromMap(Map<String,dynamic> movie){
     return MoviesDAO(
       //idGenre: movie['idGenre'],
-      idMovie: movie['idMovie'],
+      idMovie: 1,
       imgMovie: movie['imgMovie'],
       nameMovie: movie['nameMovie'],
       overview: movie['overview'],

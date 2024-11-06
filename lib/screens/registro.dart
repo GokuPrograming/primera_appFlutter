@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pmsn2024b/firebase/email_auth.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class Registro extends StatefulWidget {
+  const Registro({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<Registro> createState() => _RegistroScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegistroScreenState extends State<Registro> {
+  EmailAuth createUser = EmailAuth();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   final conUser = TextEditingController();
   final conPwd = TextEditingController();
+  final conName = TextEditingController();
   bool isLoading = false;
 
   @override
@@ -18,18 +27,27 @@ class _LoginScreenState extends State<LoginScreen> {
     TextFormField txtUser = TextFormField(
       keyboardType: TextInputType.emailAddress,
       controller: conUser,
-      decoration: const InputDecoration(prefixIcon: Icon(Icons.person)),
+      decoration: const InputDecoration(
+          prefixIcon: Icon(Icons.email), hintText: 'nombre de correo'),
     );
 
     final txtPwd = TextFormField(
       keyboardType: TextInputType.text,
       obscureText: true,
       controller: conPwd,
-      decoration: InputDecoration(prefixIcon: Icon(Icons.password)),
+      decoration: InputDecoration(
+          prefixIcon: Icon(Icons.password), hintText: 'Password'),
+    );
+    final txtnombre = TextFormField(
+      keyboardType: TextInputType.text,
+      obscureText: true,
+      controller: conName,
+      decoration: InputDecoration(
+          prefixIcon: Icon(Icons.person_3), hintText: 'nombre de usuario'),
     );
 
     final ctnCredentials = Positioned(
-      top: 400,
+      bottom: 90,
       child: Container(
         width: MediaQuery.of(context).size.width * .9,
         //margin: EdgeInsets.symmetric(horizontal: 10),
@@ -37,43 +55,28 @@ class _LoginScreenState extends State<LoginScreen> {
             color: Colors.grey, borderRadius: BorderRadius.circular(10)),
         child: ListView(
           shrinkWrap: true,
-          children: [txtUser, txtPwd],
+          children: [txtUser, txtnombre, txtPwd],
         ),
       ),
     );
 
-    final btnLogin = Positioned(
-      width: MediaQuery.of(context).size.width * .9,
-      top: 500,
-      child: ElevatedButton(
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.blue[200]),
-          onPressed: () {
-            isLoading = true;
-            setState(() {});
-            Future.delayed(const Duration(milliseconds: 4000)).then((value) => {
-                  isLoading = false,
-                  setState(() {}),
-                  Navigator.pushNamed(context, "/home")
-                });
-          },
-          child: const Text('Validar Usuario')),
-    );
     final btnRegistro = Positioned(
       width: MediaQuery.of(context).size.width * .9,
-      top: 550,
+      bottom: 40,
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(backgroundColor: Colors.blue[200]),
-          onPressed: () {
-            // isLoading = true;
-            // setState(() {});
-            // Future.delayed(const Duration(milliseconds: 4000)).then((value) => {
-            //       isLoading = false,
-            //       setState(() {}),
-
-            //     });
-            Navigator.pushNamed(context, "/registro");
+          onPressed: () async {
+            createUser.createUser(conName.text, conUser.text, conPwd.text);
+            // //registrar
+            // isLoading)true;
+            //createUser.createUser(conName.text, conUser.text, conPwd.text).then(
+            //   (value){
+            //     value ? isLoading=false: isLoading;
+            //   }
+            // );
+            setState(() {});
           },
-          child: const Text('Registrar Usuario')),
+          child: const Text('Validar Usuario')),
     );
 
     final gifLoading = Positioned(
@@ -84,6 +87,9 @@ class _LoginScreenState extends State<LoginScreen> {
         ));
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Registro'),
+      ),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -100,7 +106,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: 180,
                 )),
             ctnCredentials,
-            btnLogin,
             btnRegistro,
             isLoading ? gifLoading : Container()
           ],
